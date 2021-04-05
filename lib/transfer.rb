@@ -11,30 +11,15 @@ class Transfer
     sender.valid? && receiver.valid?
   end
   
-  
+  def execute_transaction
+    if valid? && receiver.balance && self.status == "complete"
+      receiver.balance -= amount
+      sender.balance += amount
+      self.status = "complete"
   
 end
 
 describe 'Transfer' do
-
-  let(:avi) { BankAccount.new("Avi") }
-  let(:amanda) { BankAccount.new("Amanda") }
-  let(:terrance) { BankAccount.new("Terrance") }
-  let(:transfer) { Transfer.new(amanda, avi, 50) }
-  let(:bad_transfer) { Transfer.new(amanda, avi, 4000) }
-
- 
-
-
-    it "calls on the sender and receiver's #valid? methods" do
-      transfer_class = File.read("lib/transfer.rb")
-
-      expect(amanda).to receive(:valid?).and_return(true)
-      expect(avi).to receive(:valid?).and_return(true)
-
-      transfer.valid?
-    end
-  end
 
   describe '#execute_transaction' do
     let(:avi) { BankAccount.new("Avi") }
