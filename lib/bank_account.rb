@@ -10,20 +10,7 @@ end
 
 describe "BankAccount" do
 
-  let(:avi) { BankAccount.new("Avi") }
-
-  describe "#initialize" do
-
-    it "always initializes with a status of 'open'" do
-      expect(avi.status).to eq("open")
-    end
-
-    it "can't change its name" do
-      expect { avi.name = "Bob" }.to raise_error
-    end
-  end
-
-  describe '#deposit' do
+describe '#deposit' do
     it "can deposit money into its account" do
       expect(avi.balance).to eq(1000)
       avi.deposit(1000)
