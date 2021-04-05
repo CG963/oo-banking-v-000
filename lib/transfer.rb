@@ -12,11 +12,15 @@ class Transfer
   end
   
   def execute_transaction
-    if valid? && receiver.balance && self.status == "complete"
-      receiver.balance -= amount
-      sender.balance += amount
+    if valid? && sender.balance > amount && self.status == "pending"
+      sender.balance -= amount
+      receiver.balance += amount
       self.status = "complete"
-  
+    else
+      reject
+    end
+    
+    def reject_transfer
 end
 
 describe 'Transfer' do
@@ -27,23 +31,7 @@ describe 'Transfer' do
     let(:transfer) { Transfer.new(amanda, avi, 50) }
     let(:bad_transfer) { Transfer.new(amanda, avi, 4000) }
 
-    it "can execute a successful transaction between two accounts" do
-      transfer.execute_transaction
-      expect(amanda.balance).to eq(950)
-      expect(avi.balance).to eq(1050)
-      expect(transfer.status).to eq("complete")
-    end
-
-    it "each transfer can only happen once" do
-      transfer.execute_transaction
-      expect(amanda.balance).to eq(950)
-      expect(avi.balance).to eq(1050)
-      expect(transfer.status).to eq("complete")
-      transfer.execute_transaction
-      expect(amanda.balance).to eq(950)
-      expect(avi.balance).to eq(1050)
-    end
-
+   
     it "rejects a transfer if the sender does not have enough funds (does not have a valid account)" do
       terrance.close_account
       closed_account_transfer = Transfer.new(amanda, terrance, 50)
