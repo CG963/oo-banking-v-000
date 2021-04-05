@@ -21,34 +21,18 @@ class Transfer
     end
   end
     
-    def reject_transfer
-      self.status = "rejected"
-      "Transaction rejected. Please check your account balance."
-    end
+  def reject_transfer
+    self.status = "rejected"
+    "Transaction rejected. Please check your account balance."
+  end
     
-    def reverse_transfer
-      if valid? && receiver.balance > amount && self.status == "complete"
-      receiver.balance -= amount
-      sender.balance += amount
-      self.status = "complete"
+  def reverse_transfer
+    if valid? && receiver.balance > amount && self.status == "complete"
+    receiver.balance -= amount
+    sender.balance += amount
+    self.status = "reversed"
     else
-      reject_transfer
+    reject_transfer
     end
   end
 end
-
-
-    it "can reverse a transfer between two accounts" do
-      transfer.execute_transaction
-      expect(amanda.balance).to eq(950)
-      expect(avi.balance).to eq(1050)
-      transfer.reverse_transfer
-      expect(avi.balance).to eq(1000)
-      expect(amanda.balance).to eq(1000)
-      expect(transfer.status).to eq("reversed")
-    end
-
-    it "it can only reverse executed transfers" do
-      transfer.reverse_transfer
-      expect(amanda.balance).to eq(1000)
-      expect(avi.balance).to eq(1000)
