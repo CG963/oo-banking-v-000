@@ -8,6 +8,10 @@ class Transfer
   end
   
   def valid?
+    sender.valid? && receiver.valid?
+  end
+  
+  
   
 end
 
@@ -21,12 +25,6 @@ describe 'Transfer' do
 
  
 
-  describe '#valid?' do
-    it "can check that both accounts are valid" do
-      expect(avi.valid?).to eq (true)
-      expect(amanda.valid?).to eq(true)
-      expect(transfer.valid?).to eq(true)
-    end
 
     it "calls on the sender and receiver's #valid? methods" do
       transfer_class = File.read("lib/transfer.rb")
